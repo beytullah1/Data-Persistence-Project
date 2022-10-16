@@ -8,15 +8,23 @@ public class SceneLoadBehavior : MonoBehaviour
 {
     public static SceneLoadBehavior Instance;
     public TMP_InputField nameInputField;
+    public TextMeshProUGUI highScoreText;
+    [HideInInspector] public string playerName;
 
-    public string playerName;
+    private void Start()
+    {
+        highScoreText.text = "High Score Owner: " + MainManager.highScorePlayerName + " High Score: " + MainManager.highScore;
+    }
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
     public void LoadGameScene()
     {
