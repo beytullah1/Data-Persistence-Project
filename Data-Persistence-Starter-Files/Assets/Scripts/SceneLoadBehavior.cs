@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class SceneLoadBehavior : MonoBehaviour
 {
     public static SceneLoadBehavior Instance;
     public TMP_InputField nameInputField;
-    public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI playerHighScoreText;
     [HideInInspector] public string playerName;
+
+    private int highScore;
+    private string highScorePlayerName;
 
     private void Start()
     {
-        highScoreText.text = "High Score Owner: " + MainManager.highScorePlayerName + " High Score: " + MainManager.highScore;
+        LoadScore();
+        playerHighScoreText.text = "High Score Owner: " + highScorePlayerName + " High Score: " + highScore;
     }
     private void Awake()
     {
@@ -30,5 +35,23 @@ public class SceneLoadBehavior : MonoBehaviour
     {
         playerName = nameInputField.text;
         SceneManager.LoadScene(1);
+    }
+    class SaveData
+    {
+        public string highScorePlayerName;
+        public int highScore;
+    }
+    public void LoadScore()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            highScore = data.highScore;
+            highScorePlayerName = data.highScorePlayerName;
+            playerHighScoreText.text = "High Score Owner: " + highScorePlayerName + " High Score: " + highScore.ToString();
+        }
     }
 }

@@ -16,12 +16,11 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     public TextMeshProUGUI playerNameText;
     public TextMeshProUGUI playerHighScoreText;
-    public TextMeshProUGUI highScorePlayerNameText;
 
     private bool m_Started = false;
     private int m_Points;
-    [HideInInspector] public static int highScore;
-    [HideInInspector] public static string highScorePlayerName;
+    private int highScore;
+    private string highScorePlayerName;
 
     private bool m_GameOver = false;
 
@@ -69,7 +68,6 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 LoadScore();
-                playerHighScoreText.text = "High Score Owner: " + highScorePlayerName + " High Score: " + highScore.ToString();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
@@ -116,7 +114,8 @@ public class MainManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             highScore = data.highScore;
-            highScorePlayerName = data.highScorePlayerName;           
+            highScorePlayerName = data.highScorePlayerName;
+            playerHighScoreText.text = "High Score Owner: " + highScorePlayerName + " High Score: " + highScore.ToString();
         }
     }
 }
